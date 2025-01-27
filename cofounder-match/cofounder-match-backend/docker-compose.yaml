@@ -1,0 +1,7 @@
+services:
+  cofounder_match_backend:
+      image: ghcr.io/${org}/cofounder-match-backend:${COFOUNDER_MATCH_BACKEND_IMAGE_TAG:-${DEFAULT_IMAGE_TAG:?DEFAULT_IMAGE_TAG is not set}}
+      restart: always
+
+      
+

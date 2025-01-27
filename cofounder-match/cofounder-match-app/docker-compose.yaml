@@ -1,0 +1,4 @@
+services:
+  cofounder_match_app:
+      image: ghcr.io/${org}/app:${COFOUNDER_MATCH_APP_IMAGE_TAG:-${DEFAULT_IMAGE_TAG:?DEFAULT_IMAGE_TAG is not set}}
+      restart: always
