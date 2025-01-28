@@ -9,3 +9,4 @@ import ./common/minio/Caddyfile
 import ./common/kong/Caddyfile
 #import ./common/pgweb/Caddyfile
 # import ./cofounder-match/Caddyfile
+import./common/keycloak/Caddyfile
