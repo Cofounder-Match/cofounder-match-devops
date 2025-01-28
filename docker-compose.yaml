@@ -11,6 +11,7 @@ include:
  - ./common/kong/docker-compose.yaml
 #  - ./common/pgweb/docker-compose.yaml
 #  - ./common/hasura/docker-compose.yaml
+ - ./common/keycloak/docker-compose.yaml
  - ./cofounder-match/docker-compose.yaml
 
 services:
