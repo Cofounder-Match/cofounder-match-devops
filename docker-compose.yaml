@@ -2,7 +2,7 @@ include:
 #  - ./common/monitoring/docker-compose.yaml
  - ./common/minio/docker-compose.yaml
  - ./common/environment/docker-compose.yaml
-#  - ./common/uptime/docker-compose.yaml
+ - ./common/uptime/docker-compose.yaml
 #  - ./common/clickhouse/docker-compose.yaml
 #  - ./common/redis/docker-compose.yaml
  - ./common/db/docker-compose.yaml
@@ -13,6 +13,8 @@ include:
 #  - ./common/hasura/docker-compose.yaml
  - ./common/keycloak/docker-compose.yaml
 #  - ./cofounder-match/docker-compose.yaml
+#  - ./user-management-service/docker-compose.yaml
+
 
 services:
   caddy:
@@ -21,6 +23,7 @@ services:
       service: caddy
     volumes:
      - ./cofounder-match:/etc/caddy/cofounder-match
+     - ./user-management-service:/etc/user-management-service
 
 volumes:
   caddy_data:

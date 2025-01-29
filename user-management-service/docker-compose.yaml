@@ -1,0 +1,4 @@
+services:
+  user_management_service:
+      image: ghcr.io/${org}/user-management-service:${USER_MANAGEMENT_SERVICE_IMAGE_TAG:-${DEFAULT_IMAGE_TAG:?DEFAULT_IMAGE_TAG is not set}}
+      restart: always
