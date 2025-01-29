@@ -1,6 +1,6 @@
 services:
   keycloak:
-    image: keycloak:26.1
+    image: keycloak/keycloak:26.1
     restart: always
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME:?KC_BOOTSTRAP_ADMIN_USERNAME is not set}
