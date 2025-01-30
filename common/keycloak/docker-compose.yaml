@@ -1,8 +1,12 @@
 services:
   keycloak:
-    image: keycloak/keycloak:26.1
+    image: quay.io/keycloak/keycloak:26.1.0
     restart: always
     command: start-dev
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME:?KC_BOOTSTRAP_ADMIN_USERNAME is not set}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD:?KC_BOOTSTRAP_ADMIN_PASSWORD is not set}
+      KC_DB_USERNAME: ${POSTGRES_USER}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KC_DB: {KC_DB:?KC_DB is not set}
+      KC_DB_URL: {KC_DB_URL:?KC_DB_URL is not set}
