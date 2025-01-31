@@ -74,6 +74,6 @@ else
     echo "User $VAULT_USERNAME already exists."
 fi
 
-/bhasai/consul-init.sh &
+/cofounder-match/consul-init.sh &
 
 fg %1
