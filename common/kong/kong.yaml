@@ -20,9 +20,9 @@ plugins:
 
 services:
   - name: cofounder-match-backend
-    url: http://cofounder-match-backend:3000   # recheck PORT
+    url: http://cofounder-match-backend:3000 
     routes:
-    - name: ai_route
+    - name: backend_route
       expression: 'http.path ^= "/api" '
       # plugins:
       #   - name: rate-limiting
