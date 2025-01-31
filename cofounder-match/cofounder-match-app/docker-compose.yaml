@@ -2,3 +2,6 @@ services:
   cofounder_match_app:
       image: ghcr.io/${org}/app:${COFOUNDER_MATCH_APP_IMAGE_TAG:-${DEFAULT_IMAGE_TAG:?DEFAULT_IMAGE_TAG is not set}}
       restart: always
+      environment:
+        NEXT_PUBLIC_GOOGLE_API_KEY: ${NEXT_PUBLIC_GOOGLE_API_KEY:?NEXT_PUBLIC_GOOGLE_API_KEY is not set}
+        NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL:?NEXT_PUBLIC_BACKEND_URL is not set}
