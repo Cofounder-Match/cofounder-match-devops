@@ -23,7 +23,7 @@ services:
     url: http://cofounder-match-backend:3000 
     routes:
     - name: backend_route
-      expression: 'http.path ^= "/api" '
+      expression: 'http.path ^= "/backend" '
       # plugins:
       #   - name: rate-limiting
       #     config:
