@@ -1,0 +1,3 @@
+{$DOMAIN_SCHEME}://ui.{$DOMAIN_NAME} {
+    reverse_proxy cofounder_match_ai:3000
+}
