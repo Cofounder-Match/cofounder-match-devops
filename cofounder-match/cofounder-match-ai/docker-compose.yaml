@@ -1,0 +1,47 @@
+
+
+services:
+  cofounder_match_backend:
+    image: ghcr.io/${org}/cofounder-match-ai:${COFOUNDER_MATCH_AI_IMAGE_TAG:-${DEFAULT_IMAGE_TAG:?DEFAULT_IMAGE_TAG is not set}}
+    restart: always
+    depends_on:
+      - db
+      - redis
+      - rabbitmq
+    env_file: .env
+    environment:
+      BACKEND_URL: ${BACKEND_URL}
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    entrypoint: ["sh", "-c", "flask db upgrade && python run.py"]
+
+  celery_worker:
+    build: .
+    container_name: celery_worker
+    restart: always
+    depends_on:
+      - app
+      - redis
+      - rabbitmq
+    env_file: .env
+    environment:
+      BACKEND_URL: ${BACKEND_URL}
+    volumes:
+      - .:/app
+    entrypoint: ["celery", "-A", "run_celery", "worker", "--loglevel=info"]
+
+  celery_beat:
+    build: .
+    container_name: celery_beat
+    restart: always
+    depends_on:
+      - app
+      - celery_worker
+    env_file: .env
+    environment:
+      BACKEND_URL: ${BACKEND_URL}
+    volumes:
+      - .:/app
+    entrypoint: ["celery", "-A", "run_celery", "beat", "--loglevel=info"]
