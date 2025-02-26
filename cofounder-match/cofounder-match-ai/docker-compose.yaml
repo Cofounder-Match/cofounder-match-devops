@@ -1,47 +1,47 @@
-
-
 services:
-  cofounder_match_backend:
-    image: ghcr.io/${org}/cofounder-match-ai:${COFOUNDER_MATCH_AI_IMAGE_TAG:-${DEFAULT_IMAGE_TAG:?DEFAULT_IMAGE_TAG is not set}}
+  cofounder_match_ai_services:
+    image: ghcr.io/${org}/cofounder-match-ai-services:${COFOUNDER_MATCH_AI_IMAGE_TAG:-${DEFAULT_IMAGE_TAG:?DEFAULT_IMAGE_TAG is not set}}
     restart: always
     depends_on:
       - db
       - redis
       - rabbitmq
-    env_file: .env
     environment:
-      BACKEND_URL: ${BACKEND_URL}
-    ports:
-      - "5000:5000"
-    volumes:
-      - .:/app
+      DATABASE_URI: ${DATABASE_URL_AI_SERVICE:?DATABASE_URL_AI_SERVICE is not set}
+      HASURA_GRAPHQL_DATABASE_URL: ${HASURA_GRAPHQL_DATABASE_URL:?HASURA_GRAPHQL_DATABASE_URL is not set}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:?CELERY_BROKER_URL is not set}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:?CELERY_RESULT_BACKEND is not set}
+      BACKEND_URL: ${COFOUNDER_MATCH_BACKEND_URL:?COFOUNDER_MATCH_BACKEND_URL is not set}
+      API_KEY: ${OPEN_AI_API_KEY:?OPEN_AI_API_KEY is not set}
+      MINIO_URL: ${MINIO_URL:?MINIO_URL is not set}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:?MINIO_ACCESS_KEY is not set}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:?MINIO_SECRET_KEY is not set}
+      MINIO_BUCKET: ${BACKEND_MINIO_BUCKET_NAME:?BACKEND_MINIO_BUCKET_NAME is not set}
+      MINIO_USER_PROFILE_BUCKET: ${MINIO_USER_PROFILE_BUCKET:?MINIO_USER_PROFILE_BUCKET is not set}
+      MINIO_ONBOARD_QUESTIONNAIRE_BUCKET: ${MINIO_ONBOARD_QUESTIONNAIRE_BUCKET:?MINIO_ONBOARD_QUESTIONNAIRE_BUCKET is not set}
     entrypoint: ["sh", "-c", "flask db upgrade && python run.py"]
 
   celery_worker:
-    build: .
-    container_name: celery_worker
+    image: ghcr.io/${org}/cofounder-match-ai-services:${COFOUNDER_MATCH_AI_IMAGE_TAG:-${DEFAULT_IMAGE_TAG:?DEFAULT_IMAGE_TAG is not set}}
     restart: always
     depends_on:
-      - app
+      - cofounder_match_ai_services
       - redis
       - rabbitmq
-    env_file: .env
     environment:
-      BACKEND_URL: ${BACKEND_URL}
-    volumes:
-      - .:/app
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:?CELERY_BROKER_URL is not set}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:?CELERY_RESULT_BACKEND is not set}
+      BACKEND_URL: ${BACKEND_URL:?BACKEND_URL is not set}
     entrypoint: ["celery", "-A", "run_celery", "worker", "--loglevel=info"]
 
   celery_beat:
-    build: .
-    container_name: celery_beat
+    image: ghcr.io/${org}/cofounder-match-ai-services:${COFOUNDER_MATCH_AI_IMAGE_TAG:-${DEFAULT_IMAGE_TAG:?DEFAULT_IMAGE_TAG is not set}}
     restart: always
     depends_on:
-      - app
+      - cofounder_match_ai_services
       - celery_worker
-    env_file: .env
     environment:
-      BACKEND_URL: ${BACKEND_URL}
-    volumes:
-      - .:/app
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:?CELERY_BROKER_URL is not set}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:?CELERY_RESULT_BACKEND is not set}
+      BACKEND_URL: ${COFOUNDER_MATCH_BACKEND_URL:?COFOUNDER_MATCH_BACKEND_URL is not set}
     entrypoint: ["celery", "-A", "run_celery", "beat", "--loglevel=info"]
