@@ -1,5 +1,5 @@
 services:
-  cofounder_match_ai_services:
+  cofounder_match_ai:
     image: ghcr.io/${org}/cofounder-match-ai-services:${COFOUNDER_MATCH_AI_IMAGE_TAG:-${DEFAULT_IMAGE_TAG:?DEFAULT_IMAGE_TAG is not set}}
     restart: always
     depends_on:
@@ -8,7 +8,7 @@ services:
       - rabbitmq
     environment:
       DATABASE_URI: ${DATABASE_URL_AI_SERVICE:?DATABASE_URL_AI_SERVICE is not set}
-      HASURA_GRAPHQL_DATABASE_URL: ${HASURA_GRAPHQL_DATABASE_URL:?HASURA_GRAPHQL_DATABASE_URL is not set}
+      HASURA_GRAPHQL_DATABASE_URL: ${HASURA_GRAPHQL_DATABASE_URL_AI_SERVICE:?HASURA_GRAPHQL_DATABASE_URL_AI_SERVICE is not set}
       CELERY_BROKER_URL: ${CELERY_BROKER_URL:?CELERY_BROKER_URL is not set}
       CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:?CELERY_RESULT_BACKEND is not set}
       BACKEND_URL: ${COFOUNDER_MATCH_BACKEND_URL:?COFOUNDER_MATCH_BACKEND_URL is not set}
@@ -25,20 +25,20 @@ services:
     image: ghcr.io/${org}/cofounder-match-ai-services:${COFOUNDER_MATCH_AI_IMAGE_TAG:-${DEFAULT_IMAGE_TAG:?DEFAULT_IMAGE_TAG is not set}}
     restart: always
     depends_on:
-      - cofounder_match_ai_services
+      - cofounder_match_ai
       - redis
       - rabbitmq
     environment:
       CELERY_BROKER_URL: ${CELERY_BROKER_URL:?CELERY_BROKER_URL is not set}
       CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:?CELERY_RESULT_BACKEND is not set}
-      BACKEND_URL: ${BACKEND_URL:?BACKEND_URL is not set}
+      BACKEND_URL: ${COFOUNDER_MATCH_BACKEND_URL:?COFOUNDER_MATCH_BACKEND_URL is not set}
     entrypoint: ["celery", "-A", "run_celery", "worker", "--loglevel=info"]
 
   celery_beat:
     image: ghcr.io/${org}/cofounder-match-ai-services:${COFOUNDER_MATCH_AI_IMAGE_TAG:-${DEFAULT_IMAGE_TAG:?DEFAULT_IMAGE_TAG is not set}}
     restart: always
     depends_on:
-      - cofounder_match_ai_services
+      - cofounder_match_ai
       - celery_worker
     environment:
       CELERY_BROKER_URL: ${CELERY_BROKER_URL:?CELERY_BROKER_URL is not set}
