@@ -37,4 +37,5 @@ services:
         REDIS_HOST: 'redis'
         REDIS_PORT: '6379'
         AI_SERVICE_URL: ${COFOUNDER_MATCH_AI_SERVICE_URL:?COFOUNDER_MATCH_AI_SERVICE_URL is not set}
+        LINKEDIN_URL: ${LINKEDIN_URL:?LINKEDIN_URL is not set}
         
